@@ -91,6 +91,6 @@
 
     @setState
       index: null
-      formArticle: {}
+      formArticle: {name: '', category: ''}
       articles: articles
       isEditing: false
