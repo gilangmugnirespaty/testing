@@ -1,0 +1,12 @@
+h1 Selamat datang
+= react_component 'ProductsIndexPage', products: @products.as_json
+
+javascript:
+  dispatcher.dispatch({
+    actionType: 'form-products:initialize',
+    products: #{@products.to_json.html_safe}
+  })
+
+  dispatcher.dispatch({
+    actionType: 'products-index-page:initialize',
+  })

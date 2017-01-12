@@ -1,0 +1,122 @@
+1. tentukan tema
+2. tetapkan tujuan penulisan
+3. rumuskan ide pokok atau masalah
+4. kembangkan tema dan pembahasan sesuai dengan jenis artikel
+5. buat kesimpulan
+
+Assalamualaikum guys, kali ini admin akan mengulas apa itu react dan mengapa memilih react
+Mungkin kebanyakan orang akan lebih mengenali apa itu facebook ketimbang apa itu react hehe pada awalnya juga admin seperti itu. Ya sebagaimana kita tahu facebook adalah website terkenal yang memiliki ratusan juta user dari seluruh penjuru dunia. nah mungkin kita sebagai developer bertannya-tanya apa yang menyebabkan performance dari website facebook tetap ok walaupun digunakan oleh miliyaran user dan miliyaran user dapat di representasikan dengan miliyaran data, belum satu user dapat memliki banyak feature yang disediakan oleh facebook tak terbayang data-data yang harus diolah dan langsung di sajikan ke user dengan performance yang ok. pusing mungkin ya kalo memikirkan bagaimana mem maintenance data-datanya haha. dibalik kehebatan website facebook itu ada salah satunya library yang memang didesain untuk itu, namanya react. nah baru disini admin akan mem review apa itu react yah. react adalah pustaka javascript untuk membuat antarmuka website kelas atas. React sendiri selain memang dibangun langsung oleh facebook, juga telah digunakan secara live pada antarmuka facebook dan instagram. jika dilihat dari arsitektur pengimplementasian antarmuka pengguna, maka react dapat dikatan sebagai komponen V dalam MVC. tujuan nya di bangun react adalahh : membangun aplikasi berskala besar dengan data yang selalu berganti seiring waktu
+
+Sederhananya react itu akan menghandle semua perubahan yang terjadi dalam interface/antarmuka ke dalam data yang sudah disediakan oleh react.
+Misal kita memliki suatu kolom pencarian dan menuliskan kata-kata dalam kolom pencarian itu maka proses pencarian data di eksekusi ketika kita menekan tombol pencarian / search. nah dengan menggunakan react setiap kata yang dimasukan, react secara otomatis akan meng "refresh" bagian yang datanya mengalamii perubahan dan melakukan proses pencarian berdasarkan data actual yang di input oleh user. ya walaupun hanya memasukan satu kata pada kolom pencarian tetap saja itu ada perubahan data dalam interface, nah hebat bukan react itu sebagimana mestinya website facebook :D
+
+Menggunakan React adalah tentang bagaimana kita membuat komponen yang dapat digunakan berulang kali. Faktanya, dengan React hal yang kita lakukan hanyalah membuat komponen-komponen. Dan karena komponen-komponen tersebut bersifat sangat terbungkus (encapsulated), maka komponen-komponen yang telah dibuat tersebut, menjadikan penggunaan kode yang ditulis sekali namun dapat digunakan berulang kali, kemudian pengujian, hingga pemisahan bagian-bagian program menjadi sangat mudah.
+
+Berikut ialah contoh sederhana penggunaan methode render react js terhadap list product
+
+Di controller product kita memiliki variable @products. lalu dalam tampilan view nya kita passing data object @products untuk dapat di akses dalam file js react. berikut adalah potongan script nya
+app/views/products/view.html.erb
+<%= react_component('ProductComponent', products: @products.as_json) %>
+
+lalu dalam file js react nya kita definisikan data object yang telah dipassing sebelumnya
+
+app/assets/javascripts/components/product.js.coffee.cjsx
+@ProductComponent = createClass
+  {
+    products: @props.products
+    isEditing: false
+    formProduct: {name: '', price: ''}
+    errors: []
+  }
+Dalam react js, setiap component harus memberikan return element html hanya satu
+di dalam react terdapa 2 method yang disediakan yaitu proops dan state. dimana proops bersifat read-only dan state read-write. penggunaan proops dan state dikondisikan berdasarkan kebutuhan, misal kita hanya akan menampilkan list data products kita dapat gunakan proops namun jika kita akan merubah data products dalam suatu fungsi seperti insert, delete dan update kita dapat gunakan state
+
+dalam fungsi insert kita menggunakan state untuk merubah data dan menggunakan ajax untuk memproses data dari controller nya berikut potongan script nya
+
+app/assets/javascripts/components/product.js.coffee.cjsx
+insertProduct: ->
+    {products, formProduct, errors} = @state
+    product = {name: formProduct.name, price: formProduct.price}
+
+    $.ajax
+      method: 'post'
+      url: Routes.products_path(format: 'json')
+      data: {product}
+      error: (data) =>
+        @setState errors: data.responseJSON
+        console.log(errors)
+      success: (data) =>
+        @setState(
+          products: products.concat(data)
+          formProduct: {name: '', price: ''}
+        )
+
+setiap perubahan data pada state maka react akan menjalankan fungsi render, berikut potongan scriptnya
+
+app/assets/javascripts/components/product.js.coffee.cjsx
+{products, formProduct, isEditing, errors} = @state
+    list_errors = []
+    errors.forEach (error) ->
+      list_errors.push()
+
+    <div>
+      <h1>Panel Products</h1>
+      <h4>{errors}</h4>
+      <FormProduct product={formProduct} onInsert={@insertProduct} onUpdate={@updateProduct} isEditing={isEditing} />
+      <TableBody onEdit={@editProduct} onDestroy={@destroyProduct} products={products}/>
+    </div>
+
+pada proses diatas, didapati proses render component FormProduct dan TableBody. untuk menampilkan list product yang berubah seiring data state dirubah terdapat dalam component TableBody dan TableRow, berikuta potongan script component TableBody dan TableRow
+
+app/assets/javascripts/components/product.js.coffee.cjsx
+@TableBody
+render: ->
+    {products} = @props
+    list_products = []
+    products.forEach (product, index) =>
+      {name, price} = product
+      list_products.push(
+        <TableRow
+          key={index}
+          onEdit={@onClickEdit.bind(@, product.id)}
+          onDestroy={@onClickDestroy.bind(@, product.id)}
+          product={product}
+        />
+      )
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th colSpan="2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {list_products}
+      </tbody>
+    </table>
+
+app/assets/javascripts/components/product.js.coffee.cjsx
+@TableRow = createClass
+  propTypes:
+    onEdit: PropTypes.func.isRequired
+    onDestroy: PropTypes.func.isRequired
+    product: PropTypes.object.isRequired
+
+  render: ->
+    {onEdit, onDestroy, product} = @props
+    {name, price} = product
+    <tr>
+      <td>{name}</td>
+      <td>{price}</td>
+      <td><a href='javascript:void(0)' onClick={onEdit}>Edit</a></td>
+      <td><a href='javascript:void(0)' onClick={onDestroy}>Delete</a></td>
+    </tr>
+
+Selain dalam fungsi insert terdapat fungsi update dan delete dimana dalam masing-masing fungsi tersebut terdapat perubahan state, maka hal ini lah yang menyebabkan pemanggilan fungsi render secara otomatis dalam component react.
+
+Nah begitulan kurang lebihnya penjalasan tentang React JS, kita akan membahasnya lebih detail dalam artikel selanjutnya :D
+
+Assalamualaikum guys, for this time i'll review a bit about what is react? and why we should use react than other javascript library's
+Maybe lot of people know what facebook is, rather than react, yah so do i.

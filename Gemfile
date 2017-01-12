@@ -22,6 +22,7 @@ gem 'pry-rails'
 gem 'pry'
 gem "better_errors"
 gem "binding_of_caller"
+gem "js-routes"
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
