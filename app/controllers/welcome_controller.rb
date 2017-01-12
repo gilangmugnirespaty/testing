@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
   def index
-    @products = Product.limit(1000)
+    @products = Product.all
   end
 end

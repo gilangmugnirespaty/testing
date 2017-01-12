@@ -10,17 +10,17 @@
       price: ''
     }
 
-  # componentDidMount: ->
-  #   _this = this
+  componentDidMount: ->
+    # _this = this
 
-  #   $.ajax
-  #     url: 'products.json'
-  #     method: 'GET'
-  #     beforeSend: ->
-  #       _this.setState { isLoading: true }
-  #     success: (data) ->
-  #       _this.setState { isLoading: false }
-  #       _this.setState { products: data }
+    # $.ajax
+    #   url: 'products.json'
+    #   method: 'GET'
+    #   beforeSend: ->
+    #     _this.setState { isLoading: true }
+    #   success: (data) ->
+    #     _this.setState { isLoading: false }
+    #     _this.setState { products: data }
 
   render: ->
     # if @state.isLoading
