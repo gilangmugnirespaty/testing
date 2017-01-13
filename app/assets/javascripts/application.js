@@ -9,12 +9,18 @@
 //
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
-//
+
+//= require flux
+//= require fbemitter
+//= require lodash
+//= require init_dispatcher
+
 //= require jquery
 //= require jquery_ujs
 //= require js-routes
 //= require turbolinks
 //= require react
 //= require react_ujs
+//= require stores
 //= require components
 //= require_tree .

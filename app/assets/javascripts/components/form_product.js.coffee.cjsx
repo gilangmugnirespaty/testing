@@ -15,7 +15,7 @@
     @setState(product: nextProps.product)
 
   render: ->
-    {onUpdate, onInsert, isEditing} = @props
+    {onUpdate, isEditing} = @props
     {product} = @state
     <div>
       <p>
@@ -27,10 +27,13 @@
         <input type="number" value={product.price} onChange={@onChangedPrice} />
       </p>
       <p>
-        {!isEditing && <button onClick={onInsert}>Insert</button>}
+        {!isEditing && <button onClick={@onClickInsert}>Insert</button>}
         {isEditing && <button onClick={onUpdate}>Update</button>}
       </p>
     </div>
+
+  onClickInsert: ->
+    @props.onInsert(@state.product)
 
   onChangedName: (event) ->
     {product} = @state

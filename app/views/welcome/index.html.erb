@@ -1,11 +1,11 @@
 <h1>Welcome</h1>
-<%= react_component 'ProductsIndexPage', products: @products.as_json %>
+<%= react_component 'ProductsIndexPage' %>
 
 <% content_for :javascript_in_body do %>
   <%= javascript_tag do %>
     dispatcher.dispatch({
-      actionType:
-
+      actionType: 'products-index-page:initialize',
+      products: <%= @products.to_json.html_safe %>
     })
   <% end %>
 <% end %>
