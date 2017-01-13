@@ -1,3 +1,3 @@
-{ Dispatcher } = Flux
+# { Dispatcher } = Flux
 
-window.dispatcher = new Dispatcher()
+# window.dispatcher = new Dispatcher()

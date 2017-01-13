@@ -1,9 +1,9 @@
-{ EventEmitter } = fbemitter
+# { EventEmitter } = fbemitter
 
-CHANGE_EVENT = 'form-products-store:change'
+# CHANGE_EVENT = 'form-products-store:change'
 
-formNill = -> {name: '', price: ''}
+# formNill = -> {name: '', price: ''}
 
-window.FormProductsStore = _.assign(new EventEmitter(), {
-  product:
-})
+# window.FormProductsStore = _.assign(new EventEmitter(), {
+#   product:
+# })
