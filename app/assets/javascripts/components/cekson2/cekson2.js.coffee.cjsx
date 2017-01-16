@@ -2,10 +2,16 @@
 @CeksonComponent2 = createClass
   getInitialState: ->
     {
-      products: []
-      formProduct: {name: '', price: ''}
-      isEditing: false
+      products: Cekson2Store.getProducts()
+      formProduct: Cekson2Store.getFormProduct()
+      isEditing: Cekson2Store.getIsEditing()
     }
+
+  componentDidMount: ->
+    Cekson2Store.addChangeListener(@_onChange)
+
+  componentWillUnmount: ->
+    Cekson2Store.removeChangeListener()
 
   render: ->
     {products, formProduct, isEditing} = @state
@@ -17,22 +23,51 @@
     </div>
 
   insertProduct: ->
-    {products, formProduct} = @state
-    product = {}
-    product.name = formProduct.name
-    product.price = formProduct.price
+    # {products, formProduct} = @state
+    # product = {name: formProduct.name, price: formProduct.price}
 
-    @setState(
-      products: products.concat(product)
-      formProduct: {name: '', price: ''}
-    )
+    # @setState(
+    #   products: products.concat(product)
+    #   formProduct: {name: '', price: ''}
+    # )
+    { formProduct } = @state
+    product = {name: formProduct.name, price: formProduct.price}
 
-  destroyProduct: (index) ->
-    {products} = @state
-    products.splice(index, 1)
-    @setState product: products
+    # dispatcher.dispatch
+    #   actionType: 'cekson2/products:insert'
+    #   product: product
 
-  editProduct: (index) ->
+    $.ajax
+      method: 'post'
+      url: Routes.products_path(format: 'json')
+      data: { product: product }
+      success: (data) ->
+        dispatcher.dispatch
+          actionType: 'cekson2/products:insert'
+          product: data
+      error: (data) ->
+        dispatcher.dispatch
+          actionType: 'cekson2/errors:set'
+          errors: data.responseJSON
+
+  destroyProduct: (productId) ->
+    # {products} = @state
+    # products.splice(index, 1)
+    # @setState product: products
+
+    # alert(productId)
+
+    $.ajax
+      method: 'delete'
+      url: Routes.product_path(productId)
+      dataType: 'json'
+      success: ->
+        dispatcher.dispatch
+          actionType: 'cekson2/product:delete'
+          id_buat_di_dispatch = productId
+
+
+  editProduct: (productId) ->
     {products, formProduct, isEditing} = @state
     product = products[index]
     formProduct.name = product.name
@@ -54,6 +89,17 @@
       index: null
       isEditing: false
     )
+
+  _onChange: ->
+    console.log("Set State")
+    @setState
+      products: Cekson2Store.getProducts()
+      isEditing: Cekson2Store.getIsEditing()
+      formProduct: Cekson2Store.getFormProduct()
+      errors: Cekson2Store.getErrors()
+      productId: Cekson2Store.getProductId()
+
+
 
 @FormInput = createClass
   propTypes:
@@ -115,8 +161,8 @@
       list_products.push(
         <TableRow key={index}
           product={product}
-          onEdit={@onEdit.bind(@, index)}
-          onDestroy={@onDestroy.bind(@, index)} />
+          onEdit={@onEdit.bind(@, product.id)}
+          onDestroy={@onDestroy.bind(@, product.id)} />
       )
 
     <table>
@@ -132,11 +178,11 @@
       </tbody>
     </table>
 
-  onEdit: (index) ->
-    @props.onEdit(index)
+  onEdit: (productId) ->
+    @props.onEdit(productId)
 
-  onDestroy: (index) ->
-    @props.onDestroy(index)
+  onDestroy: (productId) ->
+    @props.onDestroy(productId)
 
 @TableRow = createClass
   propTypes:

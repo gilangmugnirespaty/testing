@@ -28,12 +28,15 @@
       </p>
       <p>
         {!isEditing && <button onClick={@onClickInsert}>Insert</button>}
-        {isEditing && <button onClick={onUpdate}>Update</button>}
+        {isEditing && <button onClick={@onClickUpdate}>Update</button>}
       </p>
     </div>
 
   onClickInsert: ->
     @props.onInsert(@state.product)
+
+  onClickUpdate: ->
+    @props.onUpdate(@state.product)
 
   onChangedName: (event) ->
     {product} = @state

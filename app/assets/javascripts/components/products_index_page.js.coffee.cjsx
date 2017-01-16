@@ -9,14 +9,14 @@
       isEditing: ProductsIndexPageStore.getIsEditing()
       formProduct: ProductsIndexPageStore.getFormProduct()
       errors: ProductsIndexPageStore.getErrors()
+      productId: ProductsIndexPageStore.getProductId()
     }
 
   componentDidMount: ->
     ProductsIndexPageStore.addChangeListener(@_onChange)
-    console.log(@state.errors)
 
   componentWillUnmount: ->
-    productsIndexPageStore.removeChangeListener()
+    ProductsIndexPageStore.removeChangeListener()
 
   render: ->
     console.log(@state.products)
@@ -33,7 +33,8 @@
       <TableBody onEdit={@editProduct} onDestroy={@destroyProduct} products={products}/>
     </div>
 
-  insertProduct: (product) ->
+  insertProduct: (product) -> # dri mana product nya
+    console.log('cuk ini dri mana', product)
     product = { name: product.name, price: product.price }
 
     $.ajax
@@ -51,7 +52,7 @@
 
   destroyProduct: (productId) ->
     # {products} = @state
-
+    alert(productId)
     $.ajax
       method: 'delete'
       url: Routes.product_path(productId)
@@ -79,36 +80,43 @@
       actionType: 'products-index-page/product:edit'
       productId: productId
 
+    console.log(':<', productId)
 
-  updateProduct: ->
-    {formProduct, isEditing, products, product_id} = @state
-    product = {name: formProduct.name, price: formProduct.price}
-
-    $.ajax
-      method: 'patch'
-      dataType: 'json'
-      url: Routes.product_path(product_id)
-      data: {product}
-      success: (data) =>
-        map_products = products.map (product) ->
-          if product.id == product_id
-            product = data
-          else
-            product
-
-        @setState(
-          products: map_products
-          isEditing: false
-          formProduct: {name: '', price: ''}
-          product_id: null
-        )
+  updateProduct: (productId) ->
+    # {formProduct, isEditing, products, product_id} = @state
+    # product = {name: formProduct.name, price: formProduct.price}
 
     # $.ajax
     #   method: 'patch'
     #   dataType: 'json'
-    #   url: Routes.product_path()
-    #   data:
-    #   success:
+    #   url: Routes.product_path(product_id)
+    #   data: {product}
+    #   success: (data) =>
+    #     map_products = products.map (product) ->
+    #       if product.id == product_id
+    #         product = data
+    #       else
+    #         product
+
+    #     @setState(
+    #       products: map_products
+    #       isEditing: false
+    #       formProduct: {name: '', price: ''}
+    #       product_id: null
+    #     )
+    {formProduct, productId} = @state
+
+    console.log('cekoznsdasdasdasdsada', productId)
+    $.ajax
+      method: 'patch'
+      dataType: 'json'
+      url: Routes.product_path(productId)
+      data: { product: formProduct }
+      success: (data) =>
+        dispatcher.dispatch
+          actionType: 'products-index-page/product:update'
+          formProduct: data
+          productId: productId
 
   _onChange: ->
     console.log("TEST")
@@ -117,3 +125,4 @@
       isEditing: ProductsIndexPageStore.getIsEditing()
       formProduct: ProductsIndexPageStore.getFormProduct()
       errors: ProductsIndexPageStore.getErrors()
+      productId: ProductsIndexPageStore.getProductId()
