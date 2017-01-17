@@ -51,7 +51,7 @@
 
   destroyProduct: (productId) ->
     # {products} = @state
-    alert(productId)
+    alert('Data was successfully destroyed')
     $.ajax
       method: 'delete'
       url: Routes.product_path(productId)
