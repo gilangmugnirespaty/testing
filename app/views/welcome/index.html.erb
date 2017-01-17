@@ -4,7 +4,7 @@
 <% content_for :javascript_in_body do %>
   <%= javascript_tag do %>
     dispatcher.dispatch({
-      actionType: 'products-index-page:initialize',
+      actionType: 'table-body-store:initialize',
       products: <%= @products.to_json.html_safe %>
     })
   <% end %>

@@ -1,5 +1,5 @@
 {createClass, PropTypes} = React
-@TableRow = createClass
+@TableCekson1Row = createClass
   propTypes:
     onEdit: PropTypes.func.isRequired
     onDestroy: PropTypes.func.isRequired
@@ -12,6 +12,6 @@
     <tr>
       <td>{name}</td>
       <td>{price}</td>
-      <td><a href='javascript:void(0)' onClick={onEdit}>Edit</a></td>
+      <td><a href='javascript:void(0)' onClick={onEdit}>Editz</a></td>
       <td><a href='javascript:void(0)' onClick={onDestroy}>Delete</a></td>
     </tr>
