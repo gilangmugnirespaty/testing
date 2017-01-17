@@ -51,7 +51,14 @@
 
   destroyProduct: (productId) ->
     # {products} = @state
-    alert('Data was successfully destroyed')
+    swal {
+      title: "Are you sure?"
+      type: "warning"
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55"
+      confirmButtonText: "Yes, delete it!"
+      closeOnConfirm: true
+    }
     $.ajax
       method: 'delete'
       url: Routes.product_path(productId)

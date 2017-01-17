@@ -57,8 +57,6 @@
       actionType: 'form-products-store:name_changed'
       event: event
 
-    console.log(product.name)
-
   onChangedPrice: (event) ->
     { product } = @state
     # {product} = @state
@@ -67,8 +65,6 @@
     dispatcher.dispatch
       actionType: 'form-products-store:price_changed'
       event: event
-
-    console.log(product.price)
 
   # insertProduct: (product) -> # dri mana product nya
   insertProduct: ->

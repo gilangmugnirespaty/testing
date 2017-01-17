@@ -25,6 +25,8 @@ gem "binding_of_caller"
 gem "js-routes"
 gem 'pg'
 
+# Use sweetalert-rails for beautify 'Alert' javascript box
+gem 'sweetalert-rails'
 # Use lodash-rails as javascript data processor
 gem 'lodash-rails'
 # Use jquery as the JavaScript library

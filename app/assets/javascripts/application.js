@@ -23,4 +23,5 @@
 //= require react_ujs
 //= require stores
 //= require components
+//= require sweetalert
 //= require_tree .
