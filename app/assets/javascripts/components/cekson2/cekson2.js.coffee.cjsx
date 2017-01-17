@@ -5,6 +5,7 @@
       products: Cekson2Store.getProducts()
       formProduct: Cekson2Store.getFormProduct()
       isEditing: Cekson2Store.getIsEditing()
+      productId: Cekson2Store.getProductId()
     }
 
   componentDidMount: ->
@@ -30,6 +31,8 @@
     #   products: products.concat(product)
     #   formProduct: {name: '', price: ''}
     # )
+
+
     { formProduct } = @state
     product = {name: formProduct.name, price: formProduct.price}
 
@@ -64,31 +67,48 @@
       success: ->
         dispatcher.dispatch
           actionType: 'cekson2/product:delete'
-          id_buat_di_dispatch = productId
+          id_buat_di_dispatch: productId
 
 
   editProduct: (productId) ->
-    {products, formProduct, isEditing} = @state
-    product = products[index]
-    formProduct.name = product.name
-    formProduct.price = product.price
+    # {products, formProduct, isEditing} = @state
+    # product = products[index]
+    # formProduct.name = product.name
+    # formProduct.price = product.price
 
-    @setState(
-      index: index
-      formProduct: formProduct
-      isEditing: true
-    )
+    # @setState(
+    #   index: index
+    #   formProduct: formProduct
+    #   isEditing: true
+    # )
+
+    dispatcher.dispatch
+      actionType: 'cekson2/product:edit'
+      id_buat_di_dispatch: productId
 
   updateProduct: ->
-    {products, formProduct, index, isEditing} = @state
-    products[index] = formProduct
+    # {products, formProduct, index, isEditing} = @state
+    # products[index] = formProduct
 
-    @setState(
-      products: products
-      formProduct: {name: '', price: ''}
-      index: null
-      isEditing: false
-    )
+    # @setState(
+    #   products: products
+    #   formProduct: {name: '', price: ''}
+    #   index: null
+    #   isEditing: false
+    # )
+
+    { productId, formProduct } = @state
+
+    $.ajax
+      method: 'patch'
+      dataType: 'json'
+      url: Routes.product_path(productId)
+      data: { product: formProduct }
+      success: (data) ->
+        dispatcher.dispatch
+          actionType: 'cekson2/product:update'
+          formProduct: data
+          id_buat_di_dispatch: productId
 
   _onChange: ->
     console.log("Set State")
