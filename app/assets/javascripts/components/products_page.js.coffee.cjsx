@@ -113,7 +113,7 @@
     console.log(price)
 
 
-TableRow = createClass
+@TableRow = createClass
   propTypes:
     product: PropTypes.object.isRequired
     onEdit: PropTypes.func.isRequired

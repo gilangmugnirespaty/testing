@@ -61,6 +61,7 @@ dispatcher.register (payload) ->
 
       FormProductsStore.emitChange()
       TableBodyStore.emitChange()
+      console.log(TableBodyStore.products)
 
     when 'form-products-store:product/update'
       { formProduct, productId } = payload

@@ -24,13 +24,13 @@
     </div>
 
   insertProduct: ->
-    # {products, formProduct} = @state
-    # product = {name: formProduct.name, price: formProduct.price}
+    {products, formProduct} = @state
+    product = {name: formProduct.name, price: formProduct.price}
 
-    # @setState(
-    #   products: products.concat(product)
-    #   formProduct: {name: '', price: ''}
-    # )
+    @setState(
+      products: products.concat(product)
+      formProduct: {name: '', price: ''}
+    )
 
 
     { formProduct } = @state
@@ -218,3 +218,4 @@
       <td><a href='javascript:void(0)' onClick={onEdit}>Edit</a></td>
       <td><a href='javascript:void(0)' onClick={onDestroy}>Destroy</a></td>
     </tr>
+

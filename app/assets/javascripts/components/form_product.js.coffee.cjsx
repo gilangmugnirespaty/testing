@@ -84,8 +84,6 @@
           actionType: 'products-index-page/errors:set'
           errors: data.responseJSON
 
-
-
   updateProduct: ->
     # {formProduct, isEditing, products, product_id} = @state
     # product = {name: formProduct.name, price: formProduct.price}
