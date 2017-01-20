@@ -1,11 +1,3 @@
 <h1>Welcome at index2</h1>
-<%= react_component 'CeksonComponent2' %>
+<%= react_component 'ProductsPage', products: @products.as_json %>
 
-<% content_for :javascript_in_body do %>
-  <%= javascript_tag do %>
-    dispatcher.dispatch({
-      actionType: 'cekson2:initialize',
-      products: <%= @products.to_json.html_safe %>
-    })
-  <% end %>
-<% end %>

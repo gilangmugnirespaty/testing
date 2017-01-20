@@ -27,14 +27,14 @@
     {products, formProduct} = @state
     product = {name: formProduct.name, price: formProduct.price}
 
-    @setState(
-      products: products.concat(product)
-      formProduct: {name: '', price: ''}
-    )
+    # @setState(
+    #   products: products.concat(product)
+    #   formProduct: {name: '', price: ''}
+    # )
 
 
-    { formProduct } = @state
-    product = {name: formProduct.name, price: formProduct.price}
+    # { formProduct } = @state
+    # product = {name: formProduct.name, price: formProduct.price}
 
     # dispatcher.dispatch
     #   actionType: 'cekson2/products:insert'

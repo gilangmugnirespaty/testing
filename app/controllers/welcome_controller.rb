@@ -6,4 +6,8 @@ class WelcomeController < ApplicationController
   def index2
     @products = Product.all
   end
+
+  def index3
+    @products = Product.all
+  end
 end
